@@ -1,0 +1,129 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+
+
+<div class="container p-3" style="background:#fdfdfd">
+    <div class="container d-flex p-3">
+        <div class="col-3 p-3">
+            <img src="{{ listitem.imageUrl }}" alt="{{ listitem.title }}" height="400px">
+        </div>
+        <div class="col-6 p-3" >
+            <h2>Book: {{ listitem.title }}</h2>
+            <p>Description: {{ listitem.description }}</p>
+            <hr/>
+            <p>Category: {{ listitem.category }}</p>
+            <p>Owner: {{ listitem.ownUser }}</p>   
+            </div>
+        <div class="col-3 p-3" style="color:#000000; background:#ffffff; border:0.5px solid #aaaaaa; border-radius:15px;">
+            <h1 class="mx-3 my-5">${{ listitem.price }}</h1>
+
+            <div class="mx-auto text-center my-3">
+                {% if user.is_authenticated %}
+                {% if isOwner  and listitem.activeStatus%}
+                    <form action="{% url 'closeAuction' id=listitem.id %}" method="POST" class="mx-3">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger my-3" style="width:100%; height:40px;">Close Auction</button>
+                    </form>
+                {% endif %}
+                    {% if listitemwatchlist %}
+                    <form action="{% url 'removeWatchlist' id=listitem.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger my-3" style="width:90%; height:40px;">Remove from Watchlist</button>
+                    </form>
+                    {% else %}
+                    <form action="{% url 'addWatchlist' id=listitem.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary my-3" style="width:90%; height:40px;">Add to Watchlist</button>
+                    </form>
+                    {% endif %}
+        {% endif%}
+            </div>
+
+            {% if user.is_authenticated and listitem.activeStatus %}
+            <form action="{% url 'addBid' id=listitem.id %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group text-center">
+                <input class="p-2" type="number" min="0" step="1" name="addBid" placeholder="Add New Bid" required style="width:90%; border:0.5px solid #aaaaaa; border-radius:5px; height:40px;"><br/>
+                <button type="submit" class="btn btn-warning my-3" style="width:90%;">Add Bid</button>
+                </div>
+            </form>
+        {% endif %}
+        
+{% comment %} I'll think about here, maybe I can put an alert about who won the auction.
+<div class="form-group">
+<strong>{{ listitem.price.user }}</storng> has won the Auction!
+</div>
+{% endif %} 
+{% endcomment %}      
+
+            
+        </div>
+    </div>
+    <hr/>
+
+    <div class="container-fluid text-center" style="width:100%">
+        {% if not listitem.activeStatus %}
+        <div class="alert alert-danger" role="alert">
+            The auction for this book is closed.
+        </div>
+        {% endif %}
+        {% if bidmessage %}
+            {% if update %}
+        
+                <div class="alert alert-primary" role="alert">
+                    {{ bidmessage }}
+                </div>
+            </div>
+            {% else %}
+            
+                <div class="alert alert-danger" role="alert">
+                    {{ bidmessage }}
+                </div>
+            
+            {% endif %}
+        {% endif %}
+    
+        {% if not listitem.activeStatus and user == listitem.price.user %}
+        <div class="alert alert-success" role="alert">
+            Congratulations, you have won the auction for this book!
+        </div>
+    {% endif %}
+
+    </div>   
+
+    
+
+    <div class="container">
+        
+        {% if user.is_authenticated %}
+        
+        <form action="{% url 'addComment' id=listitem.id %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+            <input class="my-3 p-2" type="text" name="addComment" placeholder="Add New Comment" style="width:100%; border:0.5px solid #aaaaaa; border-radius:5px; height:40px;" required><br/>
+            <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-primary">Add Comment</button>
+            </div>
+            </div>
+        </form>
+        
+        {% endif %}
+
+        
+        <ul class="list-group list-group-flush my-3">
+            <h2>Comments</h2>
+            {% for comment in allComments %}
+            
+            <li class="list-group-item">
+                <p>{{ comment.message }}</p>
+                <h6>Posted by: {{ comment.author }}</h6>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+    
+
+
+{% endblock %}

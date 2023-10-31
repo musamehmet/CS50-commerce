@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+<div class="container">
+
+
+    <div class="mx-3">
+        <div class="mb-3 d-flex align-items-center page-header">
+            <div class="col-sm-6 col-md-8"><h4 class="page-title">Create Listing</h4></div>
+        </div>
+        <hr/>
+    </div>
+    
+    <form class="container-fluid" action="{% url 'create' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" required>
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" name="description" class="form-control" id="description" placeholder="Enter description" required>
+        </div>
+        <div class="form-group">
+            <label for="imageurl" class="form-label">Image URL</label>
+            <input type="text" name="imageurl" class="form-control" id="imageurl" placeholder="Enter image URL" required>
+        </div>
+        <div class="form-group">
+            <label for="bidPrice" class="form-label">Price</label>
+            <input type="number" min="0" step="0.01" name="bidPrice" class="form-control" id="bidPrice" placeholder="Enter Price" required>
+        </div>
+        <div class="form-group">
+            <label for="category" class="form-label">Category: </label>
+        <select name="category" id="category" class="form-select">
+           
+            {% for cat in categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div class="my-3">
+        <button type="submit" class="btn btn-success">Create New List</button>
+        </div>
+    </form>
+    
+
+</div>
+
+</div>
+
+
+
+    
+{% endblock %}

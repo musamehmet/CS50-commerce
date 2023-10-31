@@ -1,0 +1,30 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+<div class="container">
+  <div class="mx-3">
+      <div class="mb-3 d-flex align-items-center page-header">
+              <div class="col-sm-6 col-md-8"><h4 class="page-title">Watchlist</h4></div>
+                  
+              </div>
+              <hr/>
+  </div>
+  
+  <div class="container d-flex flex-wrap">
+    {% for listitem in indexlist %}
+        <div class="card col-4 mx-3 mb-3" style="width: 18rem;">
+            <img src="{{ listitem.imageUrl }}" class="card-img-top" alt="{{ listitem.imageurl }}" style="width: 100%;">
+            <div class="card-body">
+              <h5 class="card-title">{{ listitem.title }}</h5>
+              <p class="card-text">{{ listitem.description }}</p>
+              <a href="{% url 'listitem' id=listitem.id %}" class="btn btn-primary">Book's Detail</a>
+            </div>
+          </div>
+    {% endfor %}
+        </div>
+
+</div>
+
+{% endblock %}
