@@ -3,6 +3,7 @@ Welcome to musamehmet's repository!
 The Commerce project is developed for CS50’s Web Programming with Python and JavaScript.
 
 **Specification**
+
 Complete the implementation of your auction site. You must fulfill the following requirements:
 
 Models: Your application should have at least three models in addition to the User model: one for auction listings, one for bids, and one for comments made on auction listings. It’s up to you to decide what fields each model should have, and what the types of those fields should be. You may have additional models if you would like.
